@@ -8,9 +8,10 @@ namespace PalX.Drivers
     public class OnboardAdcDevice : IDisposable
     {
         private bool _disposed;
-        private AdcChannel adcVBAT;
-        private AdcChannel adcMcuTemp;
-        private AdcChannel adcPcbTemp;
+        private AdcChannel adcVBatteryChannel;
+        private AdcChannel adcMcuTempChannel;
+        private AdcChannel adcPcbTempChannel;
+        //private AdcChannel thermistorChannel;
         private AdcController adcController = new();
         //private AdcChannel adc420mA;
 
@@ -31,12 +32,12 @@ namespace PalX.Drivers
             var voltage = 0f;
 
             adcController ??= new AdcController();
-            adcVBAT ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_Vbatt);
+            adcVBatteryChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_Vbatt);
 
             var average = 0;
             for (byte i = 0; i < samplesToTake; i++)
             {
-                average += adcVBAT.ReadValue();
+                average += adcVBatteryChannel.ReadValue();
 
                 Thread.Sleep(50); // pause to stabilize
             }
@@ -69,13 +70,13 @@ namespace PalX.Drivers
         public double GetPcbTemperature(bool celsius = true)
         {
             adcController ??= new AdcController();
-            adcPcbTemp ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_PcbTemperatureSensor);
+            adcPcbTempChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_PcbTemperatureSensor);
 
             var tempInCent = 0.0d;
 
             try
             {
-                double adcTempCalcValue = (ANALOG_REF_VALUE * adcPcbTemp.ReadValue()) / MAX_ADC_VALUE;
+                double adcTempCalcValue = (ANALOG_REF_VALUE * adcPcbTempChannel.ReadValue()) / MAX_ADC_VALUE;
                 tempInCent = ((13.582f - Math.Sqrt(184.470724f + (0.01732f * (2230.8f - adcTempCalcValue)))) / (-0.00866f)) + 30f;
             }
             catch
@@ -96,8 +97,8 @@ namespace PalX.Drivers
         public float GetMcuTemperature()
         {
             adcController ??= new AdcController();
-            adcMcuTemp ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_McuTemeratureSensor);
-            return adcMcuTemp.ReadValue() / 100.00f;
+            adcMcuTempChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_McuTemeratureSensor);
+            return adcMcuTempChannel.ReadValue() / 100.00f;
 
             //https://www.st.com/resource/en/datasheet/stm32f769ni.pdf
             //https://electronics.stackexchange.com/questions/324321/reading-internal-temperature-sensor-stm32
@@ -115,7 +116,7 @@ namespace PalX.Drivers
 
         //public float GetTemperatureFromThermistorNTC10K()
         //{
-        //    Temperature = -99;
+        //    var Temperature = -99d;
 
         //    //Vishay NTCALUG01A103F specs
         //    //B25/85-value  3435 to 4190 K 
@@ -123,15 +124,14 @@ namespace PalX.Drivers
         //    float NTC_B = 0.000232134233116422f;
         //    float NTC_C = 9.520031026040015e-8f;
 
-        //    if (adcController == null)
-        //        adcController = new AdcController();
+        //    adcController ??= new AdcController();
 
-        //    if (ch == null)
-        //        ch = adc.OpenChannel(PalThreePins.AdcChannel.ADC3_IN6_PF8_IO_PIN17);
+        //    if (thermistorChannel == null)
+        //        thermistorChannel = adcController.OpenChannel(Pinout.AdcChannel.ADC3_IN6_PF8_IO_PIN17);
 
         //    //calculate temperature from resistance
-        //    float volts = 3.3f * ch.ReadValue() / 4095;
-        //    volts = 3.3f * ch.ReadValue() / 4095;
+        //    float volts = 3.3f * thermistorChannel.ReadValue() / 4095;
+        //    volts = 3.3f * thermistorChannel.ReadValue() / 4095;
 
         //    double thermistorResistance = volts * 10000f / (3.3f - volts);//3.3 V for thermistor, 10K resistor/thermistor
         //    double lnR = Math.Log(thermistorResistance);
@@ -200,9 +200,10 @@ namespace PalX.Drivers
         {
             if (_disposed) return;
 
-            adcVBAT.Dispose();
-            adcPcbTemp.Dispose();
-            adcMcuTemp.Dispose();
+            adcVBatteryChannel.Dispose();
+            adcPcbTempChannel.Dispose();
+            adcMcuTempChannel.Dispose();
+            //thermistorChannel.Dispose();
         }
 
         public void Dispose()
