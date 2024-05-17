@@ -25,15 +25,16 @@ namespace OrgpalPalXDemoApp
             display.DrawString(2, 32, "nanoFramework", 1, true);//centered text
             display.Display();
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             display.ClearScreen();
             display.DrawString(2, 2, "PalX", 2, true);
             display.DrawString(2, 34, "OrgPal.com", 1, true);
             display.Display();
+            Thread.Sleep(1000);
 
             for (int i = 0; i < 10; i++)
             {
-                Thread.Sleep(10_000);
+                
                 var mcuTemp = internalAdc.GetMcuTemperature();
                 var sysTemp = internalAdc.GetPcbTemperature();
                 var thermistorTemp = double.NaN; //internalAdc.GetTemperatureFromThermistorNTC10K();
@@ -44,6 +45,7 @@ namespace OrgpalPalXDemoApp
                 display.DrawString(2, 34, $"themistor: {thermistorTemp.ToString("F2")}'C", 1, false);
                 display.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
                 display.Display();
+                Thread.Sleep(10_000);
             }
 
             // only debugging so for the moment turn the backlight off, so we dont burn it out.
