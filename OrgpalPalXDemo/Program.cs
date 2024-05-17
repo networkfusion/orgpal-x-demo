@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Device.I2c;
 using System.Diagnostics;
 using System.Threading;
 using PalX.Drivers;
@@ -14,7 +13,7 @@ namespace OrgpalPalXDemoApp
 
             Sounds.PlayDefaultSound();
 
-            var device = new SSD1x06();
+            using var device = new SSD1x06();
 
             device.ClearScreen();
             //device.Font = new BasicFont();
@@ -32,10 +31,11 @@ namespace OrgpalPalXDemoApp
             {
                 Thread.Sleep(10_000);
                 var sysTemp = OnboardDevices.GetSysTemperature();
+                var thermistorTemp = double.NaN; //OnboardDevices.GetTemperatureFromThermistorNTC10K();
                 device.ClearScreen();
                 device.DrawString(2, 2, "Temperatures:", 1, false);
                 device.DrawString(2, 24, $"system: {sysTemp}", 1, false);
-                device.DrawString(2, 34, "themistor:", 1, false);
+                device.DrawString(2, 34, $"themistor: {thermistorTemp}", 1, false);
                 device.Display();
             }
 
