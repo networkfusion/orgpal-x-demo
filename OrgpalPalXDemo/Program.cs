@@ -36,6 +36,7 @@ namespace OrgpalPalXDemoApp
                 device.DrawString(2, 2, "Temperatures:", 1, false);
                 device.DrawString(2, 24, $"system: {sysTemp}", 1, false);
                 device.DrawString(2, 34, $"themistor: {thermistorTemp}", 1, false);
+                device.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
                 device.Display();
             }
 

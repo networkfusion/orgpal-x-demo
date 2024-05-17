@@ -62,9 +62,6 @@
     <Reference Include="System.Math">
       <HintPath>packages\nanoFramework.System.Math.1.5.43\lib\System.Math.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net">
-      <HintPath>packages\nanoFramework.System.Net.1.10.79\lib\System.Net.dll</HintPath>
-    </Reference>
     <Reference Include="System.Threading">
       <HintPath>packages\nanoFramework.System.Threading.1.1.32\lib\System.Threading.dll</HintPath>
     </Reference>
