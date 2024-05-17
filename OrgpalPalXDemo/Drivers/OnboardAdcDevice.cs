@@ -30,6 +30,7 @@ namespace PalX.Drivers
         {
             var voltage = 0f;
 
+            adcController ??= new AdcController();
             adcVBAT ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_Vbatt);
 
             var average = 0;
@@ -67,6 +68,7 @@ namespace PalX.Drivers
         /// <returns>Temperature value.</returns>
         public double GetPcbTemperature(bool celsius = true)
         {
+            adcController ??= new AdcController();
             adcPcbTemp ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_PcbTemperatureSensor);
 
             var tempInCent = 0.0d;
@@ -93,6 +95,7 @@ namespace PalX.Drivers
 
         public float GetMcuTemperature()
         {
+            adcController ??= new AdcController();
             adcMcuTemp ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_McuTemeratureSensor);
             return adcMcuTemp.ReadValue() / 100.00f;
 
@@ -143,14 +146,12 @@ namespace PalX.Drivers
 
         //public float Read420mAValue()
         //{
-        //    if (adcController == null)
-        //        adcController = new AdcController();
+        //    adcController ??= new AdcController();
 
-        //    if (adc420mA == null)
-        //        adc420mA = adc.OpenChannel(PalThreePins.AdcChannel.ADC1_IN12_420MA);
+        //    adc420mA ??= adcController.OpenChannel(Pinout.AdcChannel.ADC1_IN12_420MA);
 
         //    //get 4-20 output from probe
-        //    var val420 = PalHelper.Get4to20MaValue(adc, 10, adc420mA);
+        //    var val420 = PalHelper.Get4to20MaValue(adcController, 10, adc420mA);
 
         //    if (val420 < 4)
         //        val420 = 4;//default to minimal value
@@ -161,13 +162,11 @@ namespace PalX.Drivers
         //    return val420;
         //}
 
-        //public static float Get4to20MaValue(AdcController adc = null, int samplesToTake = 10, AdcChannel adc420mA = null)
+        //public float Get4to20MaValue(AdcController adc = null, int samplesToTake = 10, AdcChannel adc420mA = null)
         //{
-        //    if (adc420mA == null && adcController == null)//only create if needed
-        //        adc = new AdcController();
+        //    adcController ??= new AdcController();
 
-        //    if (adc420mA == null)
-        //        adc420mA = adc.OpenChannel(PalThreePins.AdcChannel.ADC1_IN12_420MA);
+        //    adc420mA ??= adcController.OpenChannel(Pinout.AdcChannel.ADC1_IN12_420MA);
 
         //    int average = 0;
         //    for (byte i = 0; i < samplesToTake; i++)
