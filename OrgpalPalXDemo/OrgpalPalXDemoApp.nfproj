@@ -19,6 +19,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Drivers\Oled.cs" />
+    <Compile Include="Drivers\OnboardAdcDevice.cs" />
     <Compile Include="Drivers\OnboardDevices.cs" />
     <Compile Include="Drivers\Pinout.cs" />
     <Compile Include="Drivers\Sounds.cs" />

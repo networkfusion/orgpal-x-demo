@@ -13,31 +13,34 @@ namespace OrgpalPalXDemoApp
 
             Sounds.PlayDefaultSound();
 
-            using var device = new SSD1x06();
+            using var display = new SSD1x06();
+            using var internalAdc = new OnboardAdcDevice();
 
-            device.ClearScreen();
+            display.ClearScreen();
             //device.Font = new BasicFont();
-            device.DrawString(2, 2, "nF IOT!", 2, true);//large size 2 font
-            device.DrawString(2, 32, "nanoFramework", 1, true);//centered text
-            device.Display();
+            display.DrawString(2, 2, "nF IOT!", 2, true);//large size 2 font
+            display.DrawString(2, 32, "nanoFramework", 1, true);//centered text
+            display.Display();
 
             Thread.Sleep(2000);
-            device.ClearScreen();
-            device.DrawString(2, 2, "Orgpal", 2, true);
-            device.DrawString(2, 34, "PalX", 1, true);
-            device.Display();
+            display.ClearScreen();
+            display.DrawString(2, 2, "Orgpal", 2, true);
+            display.DrawString(2, 34, "PalX", 1, true);
+            display.Display();
 
             for (; ; )
             {
                 Thread.Sleep(10_000);
-                var sysTemp = OnboardDevices.GetSysTemperature();
+                var mcuTemp = internalAdc.GetMcuTemperature();
+                var sysTemp = internalAdc.GetPcbTemperature();
                 var thermistorTemp = double.NaN; //OnboardDevices.GetTemperatureFromThermistorNTC10K();
-                device.ClearScreen();
-                device.DrawString(2, 2, "Temperatures:", 1, false);
-                device.DrawString(2, 24, $"system: {sysTemp}", 1, false);
-                device.DrawString(2, 34, $"themistor: {thermistorTemp}", 1, false);
-                device.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
-                device.Display();
+                display.ClearScreen();
+                display.DrawString(2, 2, $"TEMPERATURES", 1, false);
+                display.DrawString(2, 14, $"mcu: {mcuTemp}", 1, false);
+                display.DrawString(2, 24, $"pcb: {sysTemp}", 1, false);
+                display.DrawString(2, 34, $"themistor: {thermistorTemp}", 1, false);
+                display.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
+                display.Display();
             }
 
             //Thread.Sleep(Timeout.Infinite);

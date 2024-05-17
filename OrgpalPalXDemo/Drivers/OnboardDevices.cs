@@ -7,33 +7,33 @@ namespace PalX.Drivers
 {
     internal static class OnboardDevices
     {
-        public static float GetSysTemperature()
-        {
-            AdcController adc1 = new AdcController();
-            var adcTemp = adc1.OpenChannel(Pinout.AdcChannel.ADC1_IN13_TEMP);
+        //public static float GetSysTemperature()
+        //{
+        //    AdcController adc1 = new AdcController();
+        //    var adcTemp = adc1.OpenChannel(Pinout.AdcChannel.ADC1_IN13_TEMP);
 
-            double tempInCent = 0;
+        //    double tempInCent = 0;
 
-            try
-            {
-                int averageADC = 0;
-                for (byte i = 0; i < 10; i++)
-                {
-                    averageADC += adcTemp.ReadValue();
-                    Thread.Sleep(5);//pauze to stabilize
-                }
-                averageADC = averageADC / 10;
+        //    try
+        //    {
+        //        int averageADC = 0;
+        //        for (byte i = 0; i < 10; i++)
+        //        {
+        //            averageADC += adcTemp.ReadValue();
+        //            Thread.Sleep(5);//pauze to stabilize
+        //        }
+        //        averageADC = averageADC / 10;
 
-                //LMT87LP sensor
-                //maximumValue = 4095; analogReference = 3300;
-                double adcTempCalcValue = (3300 * averageADC) / 4095;
-                tempInCent = ((13.582f - Math.Sqrt(184.470724f + (0.01732f * (2230.8f - adcTempCalcValue)))) / (-0.00866f)) + 30;
-                // float tempInF = ((9f / 5f) * tempInCent) + 32f;
-            }
-            catch { }
+        //        //LMT87LP sensor
+        //        //maximumValue = 4095; analogReference = 3300;
+        //        double adcTempCalcValue = (3300 * averageADC) / 4095;
+        //        tempInCent = ((13.582f - Math.Sqrt(184.470724f + (0.01732f * (2230.8f - adcTempCalcValue)))) / (-0.00866f)) + 30;
+        //        // float tempInF = ((9f / 5f) * tempInCent) + 32f;
+        //    }
+        //    catch { }
 
-            return (float)tempInCent;
-        }
+        //    return (float)tempInCent;
+        //}
 
 
         //public float GetTemperatureFromThermistorNTC10K()

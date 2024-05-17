@@ -149,17 +149,55 @@ namespace PalX.Drivers
         /// </summary>
         public static class AdcChannel
         {
-            // this channel is mapped @ position 2
-            public const int ADC1_IN8_VBAT = 2;
+            /// <summary>
+            /// Channel 0, exposed on A0, connected to PA6 (ADC1 - IN6)
+            /// </summary>
+            public const int Channel_0 = 0;
 
-            // this channel is mapped @ position 4
-            public const int ADC1_IN12_420MA = 4;
+            /// <summary>
+            /// Channel 1, exposed on A1, connected to PA4 (ADC1 - IN4)
+            /// </summary>
+            public const int Channel_1 = 1;
 
-            // this channel is mapped @ position 5
-            public const int ADC1_IN13_TEMP = 5;
+            /// <summary>
+            /// Channel 2, exposed on A2, connected to PC2 (ADC1 - IN12)
+            /// </summary>
+            public const int Channel_2 = 2;
 
-            // this channel is mapped @ position 8 - internal MCU temperature
-            public const int ADC_CHANNEL_SENSOR = 9;
+            /// <summary>
+            /// Channel 3, exposed on A3, connected to PF10 (ADC1 - IN8)
+            /// </summary>
+            public const int Channel_3 = 3;
+
+            /// <summary>
+            /// Channel 4, exposed on A4, connected to PF8 (ADC3 - IN6)
+            /// </summary>
+            public const int Channel_4 = 4;
+
+            /// <summary>
+            /// Channel 5, exposed on A5, connected to PB8 (ADC3 - IN7)
+            /// </summary>
+            public const int Channel_5 = 5;
+
+            /// <summary>
+            /// Channel 6, internal temperature sensor, connected to ADC1
+            /// </summary>
+            public const int Channel_PcbTemperatureSensor = 6;
+
+            /// <summary>
+            /// Channel 7, internal voltage reference, connected to ADC1
+            /// </summary>
+            public const int Channel_VrefIn = 7;
+
+            /// <summary>
+            /// Channel 8, connected to VBatt pin, ADC1
+            /// </summary>
+            public const int Channel_Vbatt = 8;
+
+            /// <summary>
+            /// Channel 9, connected to internal MCU temperature pin, ADC1
+            /// </summary>
+            public const int Channel_McuTemeratureSensor = 9;
         }
 
         /// <summary>Uart port definition.</summary>
