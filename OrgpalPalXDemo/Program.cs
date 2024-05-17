@@ -37,7 +37,7 @@ namespace OrgpalPalXDemoApp
                 
                 var mcuTemp = internalAdc.GetMcuTemperature();
                 var sysTemp = internalAdc.GetPcbTemperature();
-                var thermistorTemp = double.NaN; //internalAdc.GetTemperatureFromThermistorNTC10K();
+                var thermistorTemp = internalAdc.GetTemperatureFromThermistorNTC10K();
                 display.ClearScreen();
                 display.DrawString(2, 2, $"TEMPERATURES", 1, false);
                 display.DrawString(2, 14, $"mcu: {mcuTemp.ToString("F2")}'C", 1, false);

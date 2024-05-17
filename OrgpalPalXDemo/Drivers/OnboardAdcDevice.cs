@@ -11,7 +11,7 @@ namespace PalX.Drivers
         private AdcChannel adcVBatteryChannel;
         private AdcChannel adcMcuTempChannel;
         private AdcChannel adcPcbTempChannel;
-        //private AdcChannel thermistorChannel;
+        private AdcChannel thermistorChannel;
         private AdcController adcController = new();
         //private AdcChannel adc420mA;
 
@@ -114,34 +114,31 @@ namespace PalX.Drivers
             // return (adcTemp.ReadValue() - adcCalTemp30C)/(adcCalTemp110C - adcCalTemp30C) *(110.0F - 30.0F) + 30.0F);
         }
 
-        //public float GetTemperatureFromThermistorNTC10K()
-        //{
-        //    var Temperature = -99d;
+        public double GetTemperatureFromThermistorNTC10K()
+        {
+            //Vishay NTCALUG01A103F specs
+            //B25/85-value  3435 to 4190 K 
+            float NTC_A = 0.0011415995549162692f;
+            float NTC_B = 0.000232134233116422f;
+            float NTC_C = 9.520031026040015e-8f;
 
-        //    //Vishay NTCALUG01A103F specs
-        //    //B25/85-value  3435 to 4190 K 
-        //    float NTC_A = 0.0011415995549162692f;
-        //    float NTC_B = 0.000232134233116422f;
-        //    float NTC_C = 9.520031026040015e-8f;
+            adcController ??= new AdcController();
 
-        //    adcController ??= new AdcController();
+            thermistorChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_4);
 
-        //    if (thermistorChannel == null)
-        //        thermistorChannel = adcController.OpenChannel(Pinout.AdcChannel.ADC3_IN6_PF8_IO_PIN17);
+            //calculate temperature from resistance
+            float volts = 3.3f * thermistorChannel.ReadValue() / MAX_ADC_VALUE;
+            volts = 3.3f * thermistorChannel.ReadValue() / MAX_ADC_VALUE;
 
-        //    //calculate temperature from resistance
-        //    float volts = 3.3f * thermistorChannel.ReadValue() / 4095;
-        //    volts = 3.3f * thermistorChannel.ReadValue() / 4095;
+            double thermistorResistance = volts * 10000f / (3.3f - volts);//3.3 V for thermistor, 10K resistor/thermistor
+            double lnR = Math.Log(thermistorResistance);
+            double Tk = 1 / (NTC_A + NTC_B * lnR + NTC_C * (lnR * lnR * lnR));
+            double tempC = Tk - 273.15f;
 
-        //    double thermistorResistance = volts * 10000f / (3.3f - volts);//3.3 V for thermistor, 10K resistor/thermistor
-        //    double lnR = Math.Log(thermistorResistance);
-        //    double Tk = 1 / (NTC_A + NTC_B * lnR + NTC_C * (lnR * lnR * lnR));
-        //    Temperature = (float)Tk - 273.15f;
+            Debug.WriteLine($"T:{tempC,0:F1}C");
 
-        //    Debug.WriteLine($"T:{Temperature,0:F1}C {TemperatureF,0:F1}F");
-
-        //    return Temperature;
-        //}
+            return tempC;
+        }
 
 
         //public float Read420mAValue()
@@ -203,7 +200,7 @@ namespace PalX.Drivers
             adcVBatteryChannel.Dispose();
             adcPcbTempChannel.Dispose();
             adcMcuTempChannel.Dispose();
-            //thermistorChannel.Dispose();
+            thermistorChannel.Dispose();
         }
 
         public void Dispose()
