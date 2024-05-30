@@ -12,7 +12,9 @@ namespace PalX.Drivers
         private AdcChannel adcMcuTempChannel;
         private AdcChannel adcPcbTempChannel;
         private AdcChannel thermistorChannel;
-        private AdcController adcController = new();
+        private AdcController adcController1 = new();
+        private AdcController adcController2 = new();
+        private AdcController adcController3 = new();
         //private AdcChannel adc420mA;
 
         // ADC constants
@@ -31,8 +33,8 @@ namespace PalX.Drivers
         {
             var voltage = 0f;
 
-            adcController ??= new AdcController();
-            adcVBatteryChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_Vbatt);
+            adcController1 ??= new AdcController();
+            adcVBatteryChannel ??= adcController1.OpenChannel(Pinout.AdcChannel.ADC1_IN8_VBAT);
 
             var average = 0;
             for (byte i = 0; i < samplesToTake; i++)
@@ -61,6 +63,40 @@ namespace PalX.Drivers
             return voltage;
         }
 
+        ///// <summary>
+        ///// Reads the board PCB temperature sensor value.
+        ///// </summary>
+        ///// <param name="celsius">Return celsius by default, otherwise f</param>
+        ///// <param name="samplesToTake">Number of samples to read for average</param>
+        ///// <returns>Temperature value.</returns>
+        //public double GetPcbTemperature(bool celsius = true)
+        //{
+        //    adcController ??= new AdcController();
+        //    adcPcbTempChannel ??= adcController.OpenChannel(Pinout.AdcChannel.ADC1_IN13_TEMP);
+
+        //    var tempInCent = 0.0d;
+
+        //    try
+        //    {
+        //        var adcValue = 0;
+        //        for (byte i = 0;i<10;i++)
+        //        {
+        //            adcValue = adcPcbTempChannel.ReadValue();
+        //            Thread.Sleep(5);//pause to stabilize
+        //        }
+        //        double adcTempCalcValue = (ANALOG_REF_VALUE * adcValue) / MAX_ADC_VALUE;
+        //        tempInCent = ((13.582f - Math.Sqrt(184.470724f + (0.01732f * (2230.8f - adcTempCalcValue)))) / (-0.00866f)) + 30f;
+        //    }
+        //    catch
+        //    {
+        //        Debug.WriteLine("OnboardAdcDevice: GetPcbTemperature failed!");
+        //    }
+
+        //    return tempInCent;
+
+
+        //}
+
         /// <summary>
         /// Reads the board PCB temperature sensor value.
         /// </summary>
@@ -69,35 +105,35 @@ namespace PalX.Drivers
         /// <returns>Temperature value.</returns>
         public double GetPcbTemperature(bool celsius = true)
         {
-            adcController ??= new AdcController();
-            adcPcbTempChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_PcbTemperatureSensor);
+            adcController1 ??= new AdcController();
+            adcPcbTempChannel ??= adcController1.OpenChannel(Pinout.AdcChannel.ADC1_IN13_TEMP); // FIXME: this is incorrect, likely ADC1_L4
+            //var tempInCent = 0.0;
+            return adcPcbTempChannel.ReadValue() / 100.00;
 
-            var tempInCent = 0.0d;
-
-            try
-            {
-                double adcTempCalcValue = (ANALOG_REF_VALUE * adcPcbTempChannel.ReadValue()) / MAX_ADC_VALUE;
-                tempInCent = ((13.582f - Math.Sqrt(184.470724f + (0.01732f * (2230.8f - adcTempCalcValue)))) / (-0.00866f)) + 30f;
-            }
-            catch
-            {
-                Debug.WriteLine("OnboardAdcDevice: GetPcbTemperature failed!");
-            }
-            if (celsius)
-            {
-                return tempInCent;
-            }
-            else
-            {
-                return ((9f / 5f) * tempInCent) + 32f;
-            }
+            //try
+            //{
+            //    double adcTempCalcValue = ANALOG_REF_VALUE * adcPcbTempChannel.ReadValue() / MAX_ADC_VALUE;
+            //    tempInCent = ((13.582 - Math.Sqrt(184.470724 + (0.01732 * (2230.8 - adcTempCalcValue)))) / (-0.00866)) + 30;
+            //}
+            //catch
+            //{
+            //    Debug.WriteLine("OnboardAdcDevice: GetPcbTemperature failed!");
+            //}
+            //if (celsius)
+            //{
+            //    return tempInCent;
+            //}
+            //else
+            //{
+            //    return ((9 / 5) * tempInCent) + 32;
+            //}
 
         }
 
         public float GetMcuTemperature()
         {
-            adcController ??= new AdcController();
-            adcMcuTempChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_McuTemeratureSensor);
+            adcController3 ??= new AdcController();
+            adcMcuTempChannel ??= adcController3.OpenChannel(Pinout.AdcChannel.ADC_MCUTEMP_CHANNEL_SENSOR);
             return adcMcuTempChannel.ReadValue() / 100.00f;
 
             //https://www.st.com/resource/en/datasheet/stm32f769ni.pdf
@@ -111,30 +147,34 @@ namespace PalX.Drivers
             //float adcCalTemp30C = getRegisterValue(ADC_TEMP_3V3_30C) * (REFERENCE_VOLTAGE / CALIBRATION_REFERENCE_VOLTAGE);
             //float adcCalTemp110C = getRegisterValue(ADC_TEMP_3V3_110C) * (REFERENCE_VOLTAGE / CALIBRATION_REFERENCE_VOLTAGE);
 
-            // return (adcTemp.ReadValue() - adcCalTemp30C)/(adcCalTemp110C - adcCalTemp30C) *(110.0F - 30.0F) + 30.0F);
+            // return (adcMcuTempChannel.ReadValue() - adcCalTemp30C)/(adcCalTemp110C - adcCalTemp30C) *(110.0F - 30.0F) + 30.0F);
         }
 
         public double GetTemperatureFromThermistorNTC10K()
         {
             //Vishay NTCALUG01A103F specs
             //B25/85-value  3435 to 4190 K 
-            float NTC_A = 0.0011415995549162692f;
-            float NTC_B = 0.000232134233116422f;
-            float NTC_C = 9.520031026040015e-8f;
+            const double NTC_A = 0.0011415995549162692;
+            const double NTC_B = 0.000232134233116422;
+            const double NTC_C = 9.520031026040015e-8;
+            const double V_REF = 3.3;
+            const double R_REF = 10_000;
 
-            adcController ??= new AdcController();
+            adcController1 ??= new AdcController();
 
-            thermistorChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel_4);
+            thermistorChannel ??= adcController3.OpenChannel(Pinout.AdcChannel.ADC3_IN6_PF8_IO_PIN17); // FIXME: this is incorrect, likely ADC1_IN2_P2
 
             //calculate temperature from resistance
-            float volts = 3.3f * thermistorChannel.ReadValue() / MAX_ADC_VALUE;
-            volts = 3.3f * thermistorChannel.ReadValue() / MAX_ADC_VALUE;
 
-            double thermistorResistance = volts * 10000f / (3.3f - volts);//3.3 V for thermistor, 10K resistor/thermistor
-            double lnR = Math.Log(thermistorResistance);
-            double Tk = 1 / (NTC_A + NTC_B * lnR + NTC_C * (lnR * lnR * lnR));
-            double tempC = Tk - 273.15f;
+            var channelReadVolts = thermistorChannel.ReadValue();
+            var volts = V_REF * channelReadVolts / MAX_ADC_VALUE;
 
+            var thermistorResistance = volts * R_REF;// / (V_REF - volts); //3.3 V for thermistor, 10K resistor/thermistor
+            var lnR = Math.Log(thermistorResistance);
+            var Tk = 1 / (NTC_A + NTC_B * lnR + NTC_C * (lnR * lnR * lnR));
+            var tempC = Tk - 273.15;
+
+            Debug.WriteLine($"T:{channelReadVolts,0:F1}V");
             Debug.WriteLine($"T:{tempC,0:F1}C");
 
             return tempC;
@@ -196,11 +236,13 @@ namespace PalX.Drivers
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed) return;
-
             adcVBatteryChannel.Dispose();
             adcPcbTempChannel.Dispose();
             adcMcuTempChannel.Dispose();
             thermistorChannel.Dispose();
+            adcController1 = null;
+            adcController2 = null;
+            adcController3 = null;
         }
 
         public void Dispose()

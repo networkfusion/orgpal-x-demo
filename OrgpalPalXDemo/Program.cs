@@ -32,9 +32,9 @@ namespace OrgpalPalXDemoApp
             display.Display();
             Thread.Sleep(1000);
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
-                
+
                 var mcuTemp = internalAdc.GetMcuTemperature();
                 var sysTemp = internalAdc.GetPcbTemperature();
                 var thermistorTemp = internalAdc.GetTemperatureFromThermistorNTC10K();

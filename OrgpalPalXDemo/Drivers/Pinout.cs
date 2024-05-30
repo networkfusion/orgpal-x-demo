@@ -22,6 +22,9 @@ namespace PalX.Drivers
             public static readonly int LED_1 = PortPin('G', 6); // located on the right of the RJ45 port
             public static readonly int LED_2 = PortPin('G', 7); // located bottom middle
 
+            public static readonly int PALX_CHARGER_MODE_SEL = PortPin('I', 4);
+            public static readonly int PALX_CHARGER_ENABLE = PortPin('I', 5);
+
             // Buttons located on bottom of board (apart from diagnostics which is on the right middle)
             public static readonly int BUTTON_USER_BOOT1_PK7 = PortPin('K', 7);
             public static readonly int BUTTON_DIAGNOSTIC_PB7 = PortPin('B', 7); // Hidden by expansion board on IO_PORT 0!
@@ -62,31 +65,43 @@ namespace PalX.Drivers
             }
 
             /// <summary>
-            /// PORT_0 is the righthand connector
+            /// IO PORT 0
             /// </summary>
             public static class IO_PORT0
             {
+                public static readonly int IO_PORT0_PIN_2_PC7 = PortPin('C', 7);
+                public static readonly int IO_PORT0_PIN_3_PC6 = PortPin('C', 6);
+                public static readonly int IO_PORT0_PIN_5_PI2 = PortPin('I', 2);
                 public static readonly int IO_PORT0_PIN_6_PA4 = PortPin('A', 4);
                 public static readonly int IO_PORT0_PIN_7_PH13 = PortPin('H', 13);
                 public static readonly int IO_PORT0_PIN_8_PH14 = PortPin('H', 14);
                 public static readonly int IO_PORT0_PIN_12_PH15 = PortPin('H', 15);
                 public static readonly int IO_PORT0_PIN_13_PG9 = PortPin('G', 9);
+                public static readonly int IO_PORT0_PIN_17_ADC3_IN6_PF8 = PortPin('F', 8);
+                public static readonly int IO_PORT0_PIN_18_ADC3_IN7_PF9 = PortPin('F', 9);
                 public static readonly int IO_PORT0_PIN_19_PG10 = PortPin('G', 10);
+                public static readonly int IO_PORT0_PIN_20_PI0 = PortPin('I', 0);
                 public static readonly int IO_PORT0_PIN_23_INT_PI3 = PortPin('I', 3);
             }
 
             /// <summary>
-            /// PORT_1 is the middle bottom connector
+            /// IO PORT 1
             /// </summary>
             public static class IO_PORT1
             {
-                // PORT_1 is the middle bottom connector
+                public static readonly int IO_PORT1_PIN_2_UART7_RX_ADC3_IN4_PF6 = PortPin('F', 6);
+                public static readonly int IO_PORT1_PIN_3_UART7_TX_ADC3_IN5_PF7 = PortPin('F', 7);
+                public static readonly int IO_PORT1_PIN_5_PK5 = PortPin('K', 5);
                 public static readonly int IO_PORT1_PIN_6_PK4 = PortPin('K', 4);
                 public static readonly int IO_PORT1_PIN_7_PB8 = PortPin('B', 8);
                 public static readonly int IO_PORT1_PIN_8_PB9 = PortPin('B', 9);
                 public static readonly int IO_PORT1_PIN_12_PH9 = PortPin('H', 9);
                 public static readonly int IO_PORT1_PIN_13_PH10 = PortPin('H', 10);
+                public static readonly int IO_PORT1_PIN_17_ADC1_IN3_PA3 = PortPin('A', 3);
+                public static readonly int IO_PORT1_PIN_18_ADC1_IN9_PB1 = PortPin('B', 1);
                 public static readonly int IO_PORT1_PIN_19_PH11 = PortPin('H', 11);
+                public static readonly int IO_PORT1_PIN_20_PK6 = PortPin('K', 6);
+                public static readonly int IO_PORT1_PIN_22_SDA_PH9 = PortPin('H', 9);
                 public static readonly int IO_PORT1_PIN_23_INT_PG2 = PortPin('G', 2);
             }
 
@@ -150,54 +165,49 @@ namespace PalX.Drivers
         public static class AdcChannel
         {
             /// <summary>
-            /// Channel 0, exposed on A0, connected to PA6 (ADC1 - IN6)
+            /// this channel is mapped @ position 0
             /// </summary>
-            public const int Channel_0 = 0;
+            public static readonly int ADC1_IN3_PA3_IO1_PIN17 = 0;
 
             /// <summary>
-            /// Channel 1, exposed on A1, connected to PA4 (ADC1 - IN4)
+            /// this channel is mapped @ position 1  Rev E is PIN 6, Rev I+ = Pin 5 - may not work due to reset
             /// </summary>
-            public const int Channel_1 = 1;
+            public static readonly int ADC1_IN4_PA4_IO_PIN5 = 1;
 
             /// <summary>
-            /// Channel 2, exposed on A2, connected to PC2 (ADC1 - IN12)
+            /// this channel is mapped @ position 2
             /// </summary>
-            public const int Channel_2 = 2;
+            public static readonly int ADC1_IN8_VBAT = 2;
 
             /// <summary>
-            /// Channel 3, exposed on A3, connected to PF10 (ADC1 - IN8)
+            /// this channel is mapped @ position 3
             /// </summary>
-            public const int Channel_3 = 3;
+            public static readonly int ADC1_IN9_PB1_IO1_PIN18 = 3;
 
             /// <summary>
-            /// Channel 4, exposed on A4, connected to PF8 (ADC3 - IN6)
+            /// this channel is mapped @ position 4
             /// </summary>
-            public const int Channel_4 = 4;
+            public static readonly int ADC1_IN12_420MA = 4;
 
             /// <summary>
-            /// Channel 5, exposed on A5, connected to PB8 (ADC3 - IN7)
+            /// this channel is mapped @ position 5
             /// </summary>
-            public const int Channel_5 = 5;
+            public static readonly int ADC1_IN13_TEMP = 5;
 
             /// <summary>
-            /// Channel 6, internal temperature sensor, connected to ADC1
+            /// this channel is mapped @ position 6
             /// </summary>
-            public const int Channel_PcbTemperatureSensor = 6;
+            public static readonly int ADC3_IN6_PF8_IO_PIN17 = 6;
 
             /// <summary>
-            /// Channel 7, internal voltage reference, connected to ADC1
+            /// this channel is mapped @ position 7
             /// </summary>
-            public const int Channel_VrefIn = 7;
+            public static readonly int ADC3_IN9_PF9_IO_PIN18 = 7;
 
             /// <summary>
-            /// Channel 8, connected to VBatt pin, ADC1
+            /// this channel is mapped @ position 8
             /// </summary>
-            public const int Channel_Vbatt = 8;
-
-            /// <summary>
-            /// Channel 9, connected to internal MCU temperature pin, ADC1
-            /// </summary>
-            public const int Channel_McuTemeratureSensor = 9;
+            public static readonly int ADC_MCUTEMP_CHANNEL_SENSOR = 8;
         }
 
         /// <summary>Uart port definition.</summary>
