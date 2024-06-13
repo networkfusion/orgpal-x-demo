@@ -165,49 +165,60 @@ namespace PalX.Drivers
         public static class AdcChannel
         {
             /// <summary>
-            /// this channel is mapped @ position 0
+            /// Channel 0, Thermistor port input.
             /// </summary>
-            public static readonly int ADC1_IN3_PA3_IO1_PIN17 = 0;
+            /// <remarks>
+            /// Connected to PA2 (ADC1 - IN2).
+            /// </remarks>
+            public const int Channel0_ThermistorInput = 0;
 
             /// <summary>
-            /// this channel is mapped @ position 1  Rev E is PIN 6, Rev I+ = Pin 5 - may not work due to reset
+            /// Channel 1, Battery port input.
             /// </summary>
-            public static readonly int ADC1_IN4_PA4_IO_PIN5 = 1;
+            /// <remarks>
+            /// Connected to PB0 (ADC1 - IN8).
+            /// </remarks>
+            public const int Channel1_BatteryInput = 1;
 
             /// <summary>
-            /// this channel is mapped @ position 2
+            /// Channel 2, 420mA Current sensor port input.
             /// </summary>
-            public static readonly int ADC1_IN8_VBAT = 2;
+            /// <remarks>
+            /// Connected to PC2 (ADC1 - IN12).
+            /// </remarks>
+            public const int Channel2_CurrentSensorInput = 2;
 
             /// <summary>
-            /// this channel is mapped @ position 3
+            /// Channel 3, Onboard PCB temperature.
             /// </summary>
-            public static readonly int ADC1_IN9_PB1_IO1_PIN18 = 3;
+            /// <remarks>
+            /// Connected to PC3 (ADC1 - IN13).
+            /// </remarks>
+            public const int Channel3_PcbTemperatureSensor = 3;
 
             /// <summary>
-            /// this channel is mapped @ position 4
+            /// Channel 4.
             /// </summary>
-            public static readonly int ADC1_IN12_420MA = 4;
+            /// <remarks>
+            /// Internal MCU temperature sensor, connected to ADC1.
+            /// </remarks>
+            public const int Channel4_McuTemperatureSensor = 4;
 
             /// <summary>
-            /// this channel is mapped @ position 5
+            /// Channel 5.
             /// </summary>
-            public static readonly int ADC1_IN13_TEMP = 5;
+            /// <remarks>
+            /// Internal voltage reference, connected to ADC1.
+            /// </remarks>
+            public const int Channel5_InternalVoltageReference = 5;
 
             /// <summary>
-            /// this channel is mapped @ position 6
+            /// Channel 6.
             /// </summary>
-            public static readonly int ADC3_IN6_PF8_IO_PIN17 = 6;
-
-            /// <summary>
-            /// this channel is mapped @ position 7
-            /// </summary>
-            public static readonly int ADC3_IN9_PF9_IO_PIN18 = 7;
-
-            /// <summary>
-            /// this channel is mapped @ position 8
-            /// </summary>
-            public static readonly int ADC_MCUTEMP_CHANNEL_SENSOR = 8;
+            /// <remarks>
+            /// Internal VBATT pin, connected to ADC1.
+            /// </remarks>
+            public const int Channel6_BatteryVoltage = 6;
         }
 
         /// <summary>Uart port definition.</summary>

@@ -12,9 +12,7 @@ namespace PalX.Drivers
         private AdcChannel adcMcuTempChannel;
         private AdcChannel adcPcbTempChannel;
         private AdcChannel thermistorChannel;
-        private AdcController adcController1 = new();
-        private AdcController adcController2 = new();
-        private AdcController adcController3 = new();
+        private AdcController adcController = new();
         //private AdcChannel adc420mA;
 
         // ADC constants
@@ -33,8 +31,8 @@ namespace PalX.Drivers
         {
             var voltage = 0f;
 
-            adcController1 ??= new AdcController();
-            adcVBatteryChannel ??= adcController1.OpenChannel(Pinout.AdcChannel.ADC1_IN8_VBAT);
+            adcController ??= new AdcController();
+            adcVBatteryChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel6_BatteryVoltage);
 
             var average = 0;
             for (byte i = 0; i < samplesToTake; i++)
@@ -105,8 +103,8 @@ namespace PalX.Drivers
         /// <returns>Temperature value.</returns>
         public double GetPcbTemperature(bool celsius = true)
         {
-            adcController1 ??= new AdcController();
-            adcPcbTempChannel ??= adcController1.OpenChannel(Pinout.AdcChannel.ADC1_IN13_TEMP); // FIXME: this is incorrect, likely ADC1_L4
+            adcController ??= new AdcController();
+            adcPcbTempChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel3_PcbTemperatureSensor);
             //var tempInCent = 0.0;
             return adcPcbTempChannel.ReadValue() / 100.00;
 
@@ -132,8 +130,8 @@ namespace PalX.Drivers
 
         public float GetMcuTemperature()
         {
-            adcController3 ??= new AdcController();
-            adcMcuTempChannel ??= adcController3.OpenChannel(Pinout.AdcChannel.ADC_MCUTEMP_CHANNEL_SENSOR);
+            adcController ??= new AdcController();
+            adcMcuTempChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel4_McuTemperatureSensor);
             return adcMcuTempChannel.ReadValue() / 100.00f;
 
             //https://www.st.com/resource/en/datasheet/stm32f769ni.pdf
@@ -160,9 +158,9 @@ namespace PalX.Drivers
             const double V_REF = 3.3;
             const double R_REF = 10_000;
 
-            adcController1 ??= new AdcController();
+            adcController ??= new AdcController();
 
-            thermistorChannel ??= adcController3.OpenChannel(Pinout.AdcChannel.ADC3_IN6_PF8_IO_PIN17); // FIXME: this is incorrect, likely ADC1_IN2_P2
+            thermistorChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel0_ThermistorInput); // FIXME: this is incorrect, likely ADC1_IN2_P2
 
             //calculate temperature from resistance
 
@@ -240,9 +238,7 @@ namespace PalX.Drivers
             adcPcbTempChannel.Dispose();
             adcMcuTempChannel.Dispose();
             thermistorChannel.Dispose();
-            adcController1 = null;
-            adcController2 = null;
-            adcController3 = null;
+            adcController = null;
         }
 
         public void Dispose()

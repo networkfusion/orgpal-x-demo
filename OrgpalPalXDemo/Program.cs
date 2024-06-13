@@ -7,6 +7,7 @@ namespace OrgpalPalXDemoApp
 {
     public class Program
     {
+
         public static void Main()
         {
             Debug.WriteLine("Hello from nanoFramework!");
@@ -15,6 +16,8 @@ namespace OrgpalPalXDemoApp
 
             // FIXME: connect to wifi.
             // FIXME: get geolocation.
+
+            //using var meshlink = new EasylinkMeshNode();
 
             using var display = new SSD1x06();
             using var internalAdc = new OnboardAdcDevice();
