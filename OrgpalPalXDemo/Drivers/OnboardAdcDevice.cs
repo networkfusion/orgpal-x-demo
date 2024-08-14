@@ -160,14 +160,14 @@ namespace PalX.Drivers
 
             adcController ??= new AdcController();
 
-            thermistorChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel0_ThermistorInput); // FIXME: this is incorrect, likely ADC1_IN2_P2
+            thermistorChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel0_ThermistorInput);
 
             //calculate temperature from resistance
 
             var channelReadVolts = thermistorChannel.ReadValue();
             var volts = V_REF * channelReadVolts / MAX_ADC_VALUE;
 
-            var thermistorResistance = volts * R_REF;// / (V_REF - volts); //3.3 V for thermistor, 10K resistor/thermistor
+            var thermistorResistance = volts * R_REF / (V_REF - volts); //3.3 V for thermistor, 10K resistor/thermistor
             var lnR = Math.Log(thermistorResistance);
             var Tk = 1 / (NTC_A + NTC_B * lnR + NTC_C * (lnR * lnR * lnR));
             var tempC = Tk - 273.15;

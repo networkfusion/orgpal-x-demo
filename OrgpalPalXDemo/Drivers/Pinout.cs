@@ -168,7 +168,7 @@ namespace PalX.Drivers
             /// Channel 0, Thermistor port input.
             /// </summary>
             /// <remarks>
-            /// Connected to PA2 (ADC1 - IN2).
+            /// Connected to PA2 (ADC1 - IN1).
             /// </remarks>
             public const int Channel0_ThermistorInput = 0;
 
