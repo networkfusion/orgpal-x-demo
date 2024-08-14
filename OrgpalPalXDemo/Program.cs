@@ -9,6 +9,7 @@ namespace OrgpalPalXDemoApp
     {
         private static readonly SSD1x06 display = new();
         private static readonly OnboardAdcDevice internalAdc = new();
+        private static BatteryManagementSystem bms = new();
 
         public static void Main()
         {
@@ -16,6 +17,7 @@ namespace OrgpalPalXDemoApp
 
             Sounds.PlayDefaultSound();
             ShowSplashScreen();
+            
 
             // FIXME: connect to wifi.
             // FIXME: get geolocation.
@@ -42,31 +44,48 @@ namespace OrgpalPalXDemoApp
 
         private static void ShowTemperatureScreen()
         {
-            var mcuTemp = internalAdc.GetMcuTemperature();
-            var sysTemp = internalAdc.GetPcbTemperature();
-            var thermistorTemp = internalAdc.GetTemperatureFromThermistorNTC10K();
-            display.ClearScreen();
-            display.DrawString(2, 2, $"TEMPERATURES", 1, false);
-            display.DrawString(2, 14, $"mcu: {mcuTemp.ToString("F2")}'C", 1, false);
-            display.DrawString(2, 24, $"pcb: {sysTemp.ToString("F2")}'C", 1, false);
-            display.DrawString(2, 34, $"themistor: {thermistorTemp.ToString("F2")}'C", 1, false);
-            display.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
-            display.Display();
+            try
+            {
+                var mcuTemp = internalAdc.GetMcuTemperature();
+                var sysTemp = internalAdc.GetPcbTemperature();
+                var thermistorTemp = internalAdc.GetTemperatureFromThermistorNTC10K();
+                display.ClearScreen();
+                display.DrawString(2, 2, $"TEMPERATURES", 1, false);
+                display.DrawString(2, 14, $"mcu: {mcuTemp.ToString("F2")}'C", 1, false);
+                display.DrawString(2, 24, $"pcb: {sysTemp.ToString("F2")}'C", 1, false);
+                display.DrawString(2, 34, $"themistor: {thermistorTemp.ToString("F2")}'C", 1, false);
+                display.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
+                display.Display();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unable to display temperatures! {ex}");
+            }
+
+
         }
 
 
         private static void ShowVoltageScreen()
         {
-            var unregVolts = internalAdc.GetUnregulatedInputVoltage();
-            var batteryInVolts = internalAdc.GetBatteryInputVoltage();
-            var batteryVolts = internalAdc.GetBatteryVoltage();
-            display.ClearScreen();
-            display.DrawString(2, 2, $"VOLTAGES", 1, false);
-            display.DrawString(2, 14, $"unreg: {unregVolts.ToString("F2")}VDC", 1, false);
-            display.DrawString(2, 24, $"battIn: {batteryInVolts.ToString("F2")}'VDC", 1, false);
-            display.DrawString(2, 34, $"batt: {batteryVolts.ToString("F2")}'VDC", 1, false);
-            display.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
-            display.Display();
+            try
+            {
+                var unregVolts = internalAdc.GetUnregulatedInputVoltage();
+                var sysInVolts = bms.charger.Vsys; //internalAdc.GetBatteryInputVoltage();
+                var batteryVolts = bms.charger.Vbat; //internalAdc.GetBatteryVoltage();
+                display.ClearScreen();
+                display.DrawString(2, 2, $"VOLTAGES", 1, false);
+                display.DrawString(2, 14, $"unreg: {unregVolts.ToString("F2")}VDC", 1, false);
+                display.DrawString(2, 24, $"sys: {sysInVolts.VoltsDc}V", 1, false);
+                display.DrawString(2, 34, $"batt: {batteryVolts.VoltsDc}V", 1, false);
+                display.DrawString(2, 54, $"Time: {DateTime.UtcNow.ToString("o")}", 1, false);
+                display.Display();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unable to display voltages! {ex}");
+            }
+
         }
 
 

@@ -18,6 +18,7 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="Drivers\BatteryManagementSystem.cs" />
     <Compile Include="Drivers\EasylinkMeshNode.cs" />
     <Compile Include="Drivers\Oled.cs" />
     <Compile Include="Drivers\OnboardAdcDevice.cs" />
@@ -27,6 +28,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Iot.Device.Bq2579x">
+      <HintPath>packages\nanoFramework.Iot.Device.Bq2579x.1.0.250\lib\Iot.Device.Bq2579x.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
     </Reference>
@@ -54,6 +58,9 @@
     <Reference Include="System.Device.I2c">
       <HintPath>packages\nanoFramework.System.Device.I2c.1.1.16\lib\System.Device.I2c.dll</HintPath>
     </Reference>
+    <Reference Include="System.Device.Model">
+      <HintPath>packages\nanoFramework.System.Device.Model.1.2.586\lib\System.Device.Model.dll</HintPath>
+    </Reference>
     <Reference Include="System.Device.Pwm">
       <HintPath>packages\nanoFramework.System.Device.Pwm.1.1.10\lib\System.Device.Pwm.dll</HintPath>
     </Reference>
@@ -65,6 +72,12 @@
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>packages\nanoFramework.System.Threading.1.1.32\lib\System.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.ElectricCurrent">
+      <HintPath>packages\UnitsNet.nanoFramework.ElectricCurrent.5.56.0\lib\UnitsNet.ElectricCurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="UnitsNet.ElectricPotentialDc">
+      <HintPath>packages\UnitsNet.nanoFramework.ElectricPotentialDc.5.56.0\lib\UnitsNet.ElectricPotentialDc.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Temperature">
       <HintPath>packages\UnitsNet.nanoFramework.Temperature.5.56.0\lib\UnitsNet.Temperature.dll</HintPath>
