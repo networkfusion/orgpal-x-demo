@@ -17,7 +17,9 @@ namespace OrgpalPalXDemoApp
 
             Sounds.PlayDefaultSound();
             ShowSplashScreen();
-            
+
+            using var proximitySensor = new RPR_0521RS();
+            proximitySensor.InitializeDefaultConfig();
 
             // FIXME: connect to wifi.
             // FIXME: get geolocation.
@@ -28,6 +30,10 @@ namespace OrgpalPalXDemoApp
 
             for (int i = 0; i < 100; i++)
             {
+                ;
+                //Debug.WriteLine($"ProxId: {proximitySensor.GetId()}");
+                //Debug.WriteLine($"AmbientLight: {proximitySensor.AmbientLightValue}");
+                Debug.WriteLine($"Proximity: {proximitySensor.GetProximity()}");
                 // Cycle displays
                 ShowTemperatureScreen();
                 Thread.Sleep(10_000);

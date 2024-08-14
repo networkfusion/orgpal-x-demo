@@ -23,6 +23,7 @@
     <Compile Include="Drivers\Oled.cs" />
     <Compile Include="Drivers\OnboardAdcDevice.cs" />
     <Compile Include="Drivers\Pinout.cs" />
+    <Compile Include="Drivers\RPR_0521RS.cs" />
     <Compile Include="Drivers\Sounds.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
