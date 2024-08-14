@@ -8,11 +8,14 @@ namespace PalX.Drivers
     public class OnboardAdcDevice : IDisposable
     {
         private bool _disposed;
-        private AdcChannel adcVBatteryChannel;
+        private AdcController adcController = new();
         private AdcChannel adcMcuTempChannel;
         private AdcChannel adcPcbTempChannel;
         private AdcChannel thermistorChannel;
-        private AdcController adcController = new();
+        private AdcChannel adcVUregInputChannel;
+        private AdcChannel adcVInBatteryChannel;
+        private AdcChannel adcVBatteryChannel;
+
         //private AdcChannel adc420mA;
 
         // ADC constants
@@ -23,11 +26,55 @@ namespace PalX.Drivers
         /// Read the power supply input voltage.
         /// </summary>
         /// <remarks>
-        /// This should be 9-24VDC
+        /// This should be 9-24VDC.
+        /// 5VDC is alowed if using USB (but will not charge the battery).
         /// </remarks>
         /// <param name="samplesToTake">Number of samples to read for an average</param>
         /// <returns>The voltage as VDC.</returns>
         public double GetUnregulatedInputVoltage(byte samplesToTake = 5)
+        {
+            var voltage = 0f;
+
+            adcController ??= new AdcController();
+            adcVUregInputChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel5_InternalVoltageReference);
+
+            var average = 0;
+            for (byte i = 0; i < samplesToTake; i++)
+            {
+                average += adcVUregInputChannel.ReadValue();
+
+                Thread.Sleep(50); // pause to stabilize
+            }
+
+            try
+            {
+                average /= samplesToTake;
+
+                //VBat = 0.25 x VIN adc count
+                //float voltage = ((ANALOG_REF_VALUE * average) / MAX_ADC_VALUE)* 4;
+
+                voltage = ((ANALOG_REF_VALUE * average) / MAX_ADC_VALUE) * 0.004f;
+
+                voltage += 0.25f; // small offset calibration factor for board to even drop on measure
+            }
+            catch
+            {
+                Debug.WriteLine("OnboardAdcDevice: GetUnregulatedInputVoltage failed!");
+            }
+
+            return voltage;
+        }
+
+
+        /// <summary>
+        /// Read the battery voltage.
+        /// </summary>
+        /// <remarks>
+        /// This should be 9-24VDC.
+        /// </remarks>
+        /// <param name="samplesToTake">Number of samples to read for an average</param>
+        /// <returns>The voltage as VDC.</returns>
+        public double GetBatteryVoltage(byte samplesToTake = 5)
         {
             var voltage = 0f;
 
@@ -55,7 +102,49 @@ namespace PalX.Drivers
             }
             catch
             {
-                Debug.WriteLine("OnboardAdcDevice: GetUnregulatedInputVoltage failed!");
+                Debug.WriteLine("OnboardAdcDevice: GetBatteryVoltage failed!");
+            }
+
+            return voltage;
+        }
+
+        /// <summary>
+        /// Read the battery input voltage.
+        /// </summary>
+        /// <remarks>
+        /// This should be 9-24VDC.
+        /// </remarks>
+        /// <param name="samplesToTake">Number of samples to read for an average</param>
+        /// <returns>The voltage as VDC.</returns>
+        public double GetBatteryInputVoltage(byte samplesToTake = 5)
+        {
+            var voltage = 0f;
+
+            adcController ??= new AdcController();
+            adcVInBatteryChannel ??= adcController.OpenChannel(Pinout.AdcChannel.Channel1_BatteryInput);
+
+            var average = 0;
+            for (byte i = 0; i < samplesToTake; i++)
+            {
+                average += adcVInBatteryChannel.ReadValue();
+
+                Thread.Sleep(50); // pause to stabilize
+            }
+
+            try
+            {
+                average /= samplesToTake;
+
+                //VBat = 0.25 x VIN adc count
+                //float voltage = ((ANALOG_REF_VALUE * average) / MAX_ADC_VALUE)* 4;
+
+                voltage = ((ANALOG_REF_VALUE * average) / MAX_ADC_VALUE) * 0.004f;
+
+                voltage += 0.25f; // small offset calibration factor for board to even drop on measure
+            }
+            catch
+            {
+                Debug.WriteLine("OnboardAdcDevice: GetBatteryInputVoltage failed!");
             }
 
             return voltage;
