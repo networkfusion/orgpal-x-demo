@@ -25,12 +25,12 @@ namespace PalX.Drivers
             public static readonly int PALX_CHARGER_MODE_SEL = PortPin('I', 4);
             public static readonly int PALX_CHARGER_ENABLE = PortPin('I', 5);
 
-            // Buttons located on bottom of board (apart from diagnostics which is on the right middle)
-            public static readonly int BUTTON_USER_BOOT1_PK7 = PortPin('K', 7);
-            public static readonly int BUTTON_DIAGNOSTIC_PB7 = PortPin('B', 7); // Hidden by expansion board on IO_PORT 0!
-            public static readonly int BUTTON_WAKE_PA0 = PortPin('A', 0);
-            public static readonly int BUTTON_USER_WAKE_PE6 = PortPin('E', 6);
-            public static readonly int MUX_EXT_BUTTON_WAKE_PE4 = PortPin('E', 4);
+            // Buttons located on bottom of board
+            public static readonly int BUTTON_BOOT1 = PortPin('K', 7);
+            public static readonly int BUTTON_DIAGNOSTIC = PortPin('B', 7);
+            // public static readonly int BUTTON_RESET = reset btn not defined as it is not accessible.
+            public static readonly int BUTTON_BOOT0 = PortPin('K', 7);
+            public static readonly int BUTTON_WAKE = PortPin('E', 6);
 
             /// <summary>
             /// PWM Speaker PINS definition
@@ -122,12 +122,6 @@ namespace PalX.Drivers
             public static readonly int FLASH_SYSTEM_WRITE_PROTECT = PortPin('E', 2);
             public static readonly int FLASH_SYSTEM_HOLD_ACTIVE_LOW = PortPin('D', 13);
 
-
-
-            /// <summary>
-            /// SD Card Detect Pin
-            /// </summary>
-            public static readonly int SD_CARD_DETECT = PortPin('E', 5);
 
             // POWER ON/OFF FOR VARIOUS ON BOARD PERIPHERALS
             public static readonly int POWER_LCD_ON_OFF = PortPin('K', 3);

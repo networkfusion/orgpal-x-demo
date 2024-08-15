@@ -19,6 +19,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="Drivers\BatteryManagementSystem.cs" />
+    <Compile Include="Drivers\Buttons.cs" />
     <Compile Include="Drivers\EasylinkMeshNode.cs" />
     <Compile Include="Drivers\Oled.cs" />
     <Compile Include="Drivers\OnboardAdcDevice.cs" />
@@ -30,6 +31,9 @@
   <ItemGroup>
     <Reference Include="Iot.Device.Bq2579x">
       <HintPath>packages\nanoFramework.Iot.Device.Bq2579x.1.0.250\lib\Iot.Device.Bq2579x.dll</HintPath>
+    </Reference>
+    <Reference Include="Iot.Device.Button">
+      <HintPath>packages\nanoFramework.Iot.Device.Button.1.2.570\lib\Iot.Device.Button.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>

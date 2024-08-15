@@ -15,6 +15,8 @@ namespace OrgpalPalXDemoApp
         {
             Debug.WriteLine("Hello from nanoFramework!");
 
+            using var buttons = new Buttons();
+
             Sounds.PlayDefaultSound();
             ShowSplashScreen();
             
@@ -23,6 +25,8 @@ namespace OrgpalPalXDemoApp
             // FIXME: get geolocation.
 
             //using var meshlink = new EasylinkMeshNode();
+
+            // FIXME: button interupt
 
 
 
