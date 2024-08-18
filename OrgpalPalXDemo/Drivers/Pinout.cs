@@ -29,7 +29,7 @@ namespace PalX.Drivers
             public static readonly int BUTTON_BOOT1 = PortPin('K', 7);
             public static readonly int BUTTON_DIAGNOSTIC = PortPin('B', 7);
             // public static readonly int BUTTON_RESET = reset btn not defined as it is not accessible.
-            public static readonly int BUTTON_BOOT0 = PortPin('K', 7);
+            public static readonly int BUTTON_BOOT0 = PortPin('E', 4);
             public static readonly int BUTTON_WAKE = PortPin('E', 6);
 
             /// <summary>

@@ -8,34 +8,34 @@ namespace PalX.Drivers
     {
         private bool _disposed;
 
-        //public GpioButton BootOneButton;
+        public GpioButton BootOneButton;
         public GpioButton DiagnosticButton;
         //private readonly GpioButton _resetButton;
-        //public GpioButton BootZeroButton;
-        //public GpioButton WakeButton;
+        public GpioButton BootZeroButton;
+        public GpioButton WakeButton;
 
 
         public Buttons()
         {
 
-            //BootOneButton = new GpioButton(buttonPin: Pinout.GpioPin.BUTTON_BOOT1);
-            //BootOneButton.Press += BootOneButton_Press;
+            BootOneButton = new GpioButton(buttonPin: Pinout.GpioPin.BUTTON_BOOT1);
+            BootOneButton.Press += BootOneButton_Press;
 
             DiagnosticButton = new GpioButton(buttonPin: Pinout.GpioPin.BUTTON_DIAGNOSTIC);
             DiagnosticButton.Press += DiagnosticButton_Press;
 
-            //BootZeroButton = new GpioButton(buttonPin: Pinout.GpioPin.BUTTON_BOOT0);
-            //BootZeroButton.Press += BootZeroButton_Press;
+            BootZeroButton = new GpioButton(buttonPin: Pinout.GpioPin.BUTTON_BOOT0);
+            BootZeroButton.Press += BootZeroButton_Press;
 
-            //WakeButton = new GpioButton(buttonPin: Pinout.GpioPin.BUTTON_WAKE);
-            //WakeButton.Press += WakeButton_Press;
+            WakeButton = new GpioButton(buttonPin: Pinout.GpioPin.BUTTON_WAKE);
+            WakeButton.Press += WakeButton_Press;
         }
 
 
-        //private static void BootOneButton_Press(object sender, EventArgs e)
-        //{
-        //    Debug.WriteLine("Boot1 Button pressed...!");
-        //}
+        private static void BootOneButton_Press(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Boot1 Button pressed...!");
+        }
 
 
         private static void DiagnosticButton_Press(object sender, EventArgs e)
@@ -44,16 +44,16 @@ namespace PalX.Drivers
         }
 
 
-        //private static void BootZeroButton_Press(object sender, EventArgs e)
-        //{
-        //    Debug.WriteLine("Boot0 Button pressed...!");
-        //}
+        private static void BootZeroButton_Press(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Boot0 Button pressed...!");
+        }
 
 
-        //private static void WakeButton_Press(object sender, EventArgs e)
-        //{
-        //    Debug.WriteLine("Wake Button pressed...!");
-        //}
+        private static void WakeButton_Press(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Wake Button pressed...!");
+        }
 
 
 
@@ -65,14 +65,14 @@ namespace PalX.Drivers
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed) { return; };
-            //BootOneButton.Press -= BootOneButton_Press;
-            //BootOneButton.Dispose();
-            //WakeButton.Press -= WakeButton_Press;
-            //WakeButton.Dispose();
+            BootOneButton.Press -= BootOneButton_Press;
+            BootOneButton.Dispose();
+            WakeButton.Press -= WakeButton_Press;
+            WakeButton.Dispose();
             DiagnosticButton.Press -= DiagnosticButton_Press;
             DiagnosticButton.Dispose();
-            //BootZeroButton.Press -= BootZeroButton_Press;
-            //BootZeroButton.Dispose();
+            BootZeroButton.Press -= BootZeroButton_Press;
+            BootZeroButton.Dispose();
         }
 
         /// <inheritdoc/>
